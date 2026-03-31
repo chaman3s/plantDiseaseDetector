@@ -11,7 +11,10 @@ venv
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
-
+node_modules/
+.next/
+frontend/.next/
+frontend/node_modules/
 # testing
 /coverage
 
