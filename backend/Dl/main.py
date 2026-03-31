@@ -1,18 +1,28 @@
-from model import modelv1
-from extraction import dataLoader
-from validator import isvalidImage,isLeaf,isSupportedPlant,plantDisease
-def preprocess(img_path):
-    
-    if isvalidImage(img_path):
-        if isLeaf([img_path],"modelv1"):
-            if isSupportedPlant(img_path,modelname="VerifyLeaf"):
-                return plantDisease(img_path,modelname="disease_model")
-            else:
-                return "not supported plant"
-        else:
-            return "not leaf"
-    else:
-        return "not valid"
+from .model import modelv1
+from PIL import Image
+import numpy as np
+import io
+from .extraction import dataLoader
+from .validator.validateImage import isvalidImage
+from .validator.check_leaf import isLeaf,isSupportedPlant,plantDisease
+def preprocess_image(file_bytes):
+    image = Image.open(io.BytesIO(file_bytes)).convert("RGB").resize((224,224))
+    img_array = np.array(image) / 255.0
+    img_array = np.expand_dims(img_array, axis=0)
+    return img_array
+def preprocess(content):
+    imgarr=preprocess_image(content)
+    if isvalidImage(content):
+        result=isSupportedPlant(modelname="VerifyLeaf",imarr=imgarr)
+        print(result)
+        return result
+
+    #     if result:
+    #         return plantDisease(modelname="disease_model",imarr=imgarr)
+    #     else:
+    #         return "not supported plant"
+    # else:
+    #     return "not valid  image"
             
 
 if __name__ == "__main__": 

@@ -28,5 +28,8 @@ elif len(a) > 1 and a[1] == 'r':
     subprocess.run([VENV_PYTHON,a[2]])
 elif len(a) > 1 and a[1] == 'u':
     groupCmd(a=a,cmd=[VENV_PYTHON, "-m", "pip", "uninstall", a[2],"-y"])
+elif len(a) > 1 and a[1] == 'd':
+    os.system("uvicorn api.app:app --reload")
+    
 else : 
     print ("not valid command")
